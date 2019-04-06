@@ -11,8 +11,8 @@ class Level{
     public:
         uint8_t error;
 
-        Level(std::string link = "");
-        void analys(std::vector<std::string> &mapka);
+        Level(String link = "");
+        void analys(std::vector<String> &mapka);
 
         ~Level(void);
 };

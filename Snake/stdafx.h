@@ -19,6 +19,14 @@
 #include <fstream>//работа с файлами
 #include "conio.h"//_getch()
 #include <thread>//потоки
+#include <stack>//стек
+//#include <exception>
+
+#ifndef UNICODE  
+  typedef std::string String; 
+#else
+  typedef std::wstring String; 
+#endif
 
 
 // TODO: Установите здесь ссылки на дополнительные заголовки, требующиеся для программы

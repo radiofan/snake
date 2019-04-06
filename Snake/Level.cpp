@@ -2,15 +2,15 @@
 #include "addons.h"
 #include "structures.h"
 
-Level::Level(std::string link){
-    std::vector<std::string> mapka;
+Level::Level(String link){
+    std::vector<String> mapka;
     if(link != ""){
         std::ifstream file_box(link, std::ios_base::in);
         if(!(file_box.is_open())){
             error = 0x01;//не удалось открыть файл
             return;
         }else{
-            std::string str;
+            String str;
             while(!(file_box.eof())){
                 getline(file_box, str);
                 mapka.push_back(str);
@@ -28,7 +28,7 @@ Level::Level(std::string link){
     this->analys(mapka);
 }
 
-void Level::analys(std::vector<std::string> &mapka){
+void Level::analys(std::vector<String> &mapka){
 
 }
 
