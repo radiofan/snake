@@ -40,6 +40,9 @@ void Game::display_menu(){
         case 6:
             this->display_exit_menu();
             break;
+        case 7:
+            this->display_records_clear_menu();
+            break;
         default:
             break;
     }
@@ -141,7 +144,7 @@ void Game::display_records_menu(){
                   << "³                                                                             ³" << std::endl
                   << "ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ" << std::endl;
         settings.recordsRead();
-        Sleep(1000);
+        Sleep(500);
         system("cls");
         this->display_wallpaper();
     }
@@ -198,7 +201,7 @@ void Game::display_records_menu(){
               << "³                         ÕÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¸                         ³" << std::endl
               << "³                         ³";
     if(menu.top().field == 2) SetConsoleTextAttribute(console, (WORD) ((12 << 4) | 7));//ªà á­ë© ä®­, ¡¥«ë© â¥ªáâ
-    std::cout << "         DELETE          ";
+    std::cout << "       DELETE ALL        ";
     if(menu.top().field == 2) SetConsoleTextAttribute(console, (WORD) ((1 << 4) | 7));//á¨­¨© ä®­, ¡¥«ë© â¥ªáâ
 
     std::cout << "³                         ³" << std::endl
@@ -257,6 +260,36 @@ void Game::display_exit_menu(){
     LeaveCriticalSection(&sc);
 }
 
+void Game::display_records_clear_menu(){
+    EnterCriticalSection(&sc);
+    std::cout << "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿" << std::endl
+              << "³                                                                             ³" << std::endl
+              << "³                             WHAT\'S THE MATTER?                              ³" << std::endl
+              << "³                                                                             ³" << std::endl
+              << "³                        YOU WANT TO CLEAR YOUR FAILS?                        ³" << std::endl
+              << "³                                                                             ³" << std::endl
+              << "³                                                                             ³" << std::endl
+              << "³       ÕÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¸         ÕÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¸       ³" << std::endl
+              << "³       ³";
+
+    if(menu.top().field == 1) SetConsoleTextAttribute(console, (WORD) ((12 << 4) | 7));//ªà á­ë© ä®­, ¡¥«ë© â¥ªáâ
+    std::cout << "           NO            ";
+    if(menu.top().field == 1) SetConsoleTextAttribute(console, (WORD) ((1 << 4) | 7));//á¨­¨© ä®­, ¡¥«ë© â¥ªáâ
+
+    std::cout << "³         ³";
+
+    if(menu.top().field == 2) SetConsoleTextAttribute(console, (WORD) ((12 << 4) | 7));//ªà á­ë© ä®­, ¡¥«ë© â¥ªáâ
+    std::cout << "           YES           ";
+    if(menu.top().field == 2) SetConsoleTextAttribute(console, (WORD) ((1 << 4) | 7));//á¨­¨© ä®­, ¡¥«ë© â¥ªáâ
+
+    std::cout << "³       ³" << std::endl
+              << "³       ÔÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¾         ÔÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¾       ³" << std::endl
+              << "³                                                                             ³" << std::endl
+              << "³                                                                             ³" << std::endl
+              << "ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ" << std::endl;
+    LeaveCriticalSection(&sc);
+}
+
 void Game::eventExec(){
     //EnterCriticalSection(&sc);
     int8_t key;
@@ -275,6 +308,8 @@ void Game::eventExec(){
             case 6:
                 this->event_exit_menu(key);
                 break;
+            case 7:
+                this->event_records_clear_menu(key);
             default:
                 break;
         }
@@ -322,10 +357,8 @@ void Game::event_main_menu(int8_t key){
 void Game::event_records_menu(int8_t key){
     switch(key){
         case 27://esc
-            menu.pop();
             settings.recordsClear();
-            this->bell();
-            this->display_menu();
+            this->event_info_menu(key);
             break;
         case 72://strelka vverh
             if(menu.top().field == 1){
@@ -361,10 +394,8 @@ void Game::event_records_menu(int8_t key){
             break;
         case 13://enter
             if(menu.top().field == 1){
-                menu.pop();
                 settings.recordsClear();
-                this->bell();
-                this->display_menu();
+                this->event_info_menu(key);//‚ëå®¤ ¨§ ¬¥­î
             }else{
                 menu.push(display(7, 1));
                 this->bell();
@@ -424,6 +455,28 @@ void Game::event_exit_menu(int8_t key){
         case 72://strelka vverh
         case 80://strelka vniz
             break;
+        default:
+            break;
+    }
+}
+
+void Game::event_records_clear_menu(int8_t key){
+    switch(key){
+        case 27://esc
+            this->bell();
+        case 77://strelka vpravo
+        case 75://strelka vlevo
+            this->event_exit_menu(key);//€­ «®£¨ç­ ï ®¡à ¡®âª 
+            break;
+        case 13://enter
+            if(menu.top().field == 2){
+                settings.recordsClear();
+                settings.recordsDelete();
+            }
+            this->event_info_menu(key);
+            break;
+        case 72://strelka vverh
+        case 80://strelka vniz
         default:
             break;
     }

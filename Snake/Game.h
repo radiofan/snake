@@ -30,6 +30,7 @@ class Game{
         //6-screen
         void display_exit_menu();
         //7-screen
+        void display_records_clear_menu();
 
         //0-screen
         void event_main_menu(int8_t key);
@@ -40,6 +41,7 @@ class Game{
         //6-screen
         void event_exit_menu(int8_t key);
         //7-screen
+        void event_records_clear_menu(int8_t key);
 
     public:
         Game(void);

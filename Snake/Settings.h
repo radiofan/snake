@@ -29,10 +29,14 @@ class Settings{
         //Возвращает true если они есть, false если их нет
         bool recordsRead();
         //Возвращает ссылку на рекорды
-        std::vector<record> &recordsReturn();
+        const std::vector<record> &recordsReturn();
         //Очищает рекорды, возвращает true
         bool recordsClear();
+        //Возвращает инициализированы ли рекорды
         bool get_recordsInit();
+        //Удаление рекордов из settings.ini
+        //Возвращает false если что-то пошло не так, true если всё удачно
+        bool recordsDelete();
 
 
         ~Settings(void);

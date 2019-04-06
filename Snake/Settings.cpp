@@ -61,7 +61,7 @@ void Settings::recordsSort(){
     }
 }
 
-std::vector<record> &Settings::recordsReturn(){
+const std::vector<record> &Settings::recordsReturn(){
     return records;
 }
 
@@ -69,6 +69,10 @@ bool Settings::recordsClear(){
     recordsInit = false;
     records.clear();
     return true;
+}
+
+bool Settings::recordsDelete(){
+    return this->clearSectionIni(_T("records"));
 }
 
 bool Settings::get_recordsInit(){
