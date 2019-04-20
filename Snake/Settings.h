@@ -17,11 +17,15 @@ class Settings{
         //Возвращает false если что-то пошло не так, true если всё удачно
         bool clearSectionIni(String section);
 
-
         std::vector<record> records;
         void recordsSort();
         bool recordsInit;
 
+        //0-language, 1-color, 2-complex, 3-menu_sound, 4-game_sound
+        std::vector<int16_t> set;
+        //Инициализирует настройки
+        //Возвращает true
+        bool setRead();
 
     public:
         Settings(void);
@@ -37,6 +41,16 @@ class Settings{
         //Удаление рекордов из settings.ini
         //Возвращает false если что-то пошло не так, true если всё удачно
         bool recordsDelete();
+
+        //Возвращает настройку
+        //0-language, 1-color, 2-complex, 3-menu_sound, 4-game_sound
+        int16_t setReturn(int8_t i);
+        //Сдвиг указанной настройки (i) на шаг(step) вправо или влево(step<0)
+        //0-language, 1-color, 2-complex, 3-menu_sound, 4-game_sound
+        bool setStep(int8_t i, int8_t step=1);
+        //Сохраняет настройки
+        //Возвращает false если что-то пошло не так, true если всё удачно
+        bool setSave();
 
 
         ~Settings(void);

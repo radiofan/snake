@@ -23,6 +23,8 @@ class Game{
         void display_wallpaper();
         //0-screen
         void display_main_menu();
+        //3-screen
+        void display_settings_menu();
         //4-screen
         void display_records_menu();
         //5-screen
@@ -34,6 +36,8 @@ class Game{
 
         //0-screen
         void event_main_menu(int8_t key);
+        //3-screen
+        void event_settings_menu(int8_t key);
         //4-screen
         void event_records_menu(int8_t key);
         //5-screen
