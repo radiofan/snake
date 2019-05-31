@@ -27,6 +27,11 @@ class Settings{
         //Возвращает true
         bool setRead();
 
+        //Инициализирует список уровней
+        //Возвращает true
+        bool levelsRead();
+        std::vector<String> lvl_list;
+
     public:
         Settings(void);
         //Инициализирует рекорды
@@ -51,6 +56,8 @@ class Settings{
         //Сохраняет настройки
         //Возвращает false если что-то пошло не так, true если всё удачно
         bool setSave();
+
+        std::vector<String> &levelsReturn();
 
 
         ~Settings(void);

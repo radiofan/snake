@@ -5,6 +5,7 @@
 
 CRITICAL_SECTION sc;
 
+
 int _tmain(int argc, _TCHAR* argv[]){
     //std::ios_base::sync_with_stdio(false);
     InitializeCriticalSection(&sc);

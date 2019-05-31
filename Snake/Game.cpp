@@ -5,7 +5,7 @@
 extern CRITICAL_SECTION sc;
 
 Game::Game(void)
-    :done(0), console(GetStdHandle(STD_OUTPUT_HANDLE)), events(&Game::eventExec, this){
+    :lvl(settings.levelsReturn()), done(0), console(GetStdHandle(STD_OUTPUT_HANDLE)), events(&Game::eventExec, this){
 
     menu.push(display(0, 1));
     system("color 17");//Žá­®¢­®© ­ ¡®à - á¨­¨© ä®­, ¡¥«ë© â¥ªáâ
@@ -23,28 +23,45 @@ int16_t Game::exec(){
 }
 
 void Game::display_menu(){
-    system("cls");
-    this->display_wallpaper();
     //SetConsoleTextAttribute(console, (WORD) ((12 << 4) | 7));//¯¥à¢ ï ä®­, ¢â®à ï â¥ªáâ
     // C -ïàª®ªà á­ë© ä®­ (12)
     switch(menu.top().screen){
         case 0:
+            this->draw_screen();
+            this->display_wallpaper();
             this->display_main_menu();
             break;
+        case 1:
+            this->draw_screen(0, 10);
+            this->display_level_choice();
+            break;
+        case 2:
+            this->draw_screen(0, 10);
+            this->display_add_level_menu();
+            break;
         case 3:
+            this->draw_screen(0, 10);
             this->display_settings_menu();
             break;
         case 4:
+            system("cls");
+            this->display_wallpaper();
             this->display_records_menu();
             break;
         case 5:
             this->display_info_menu();
             break;
         case 6:
+            this->draw_screen(0, 15);
             this->display_exit_menu();
             break;
         case 7:
+            this->draw_screen(0, 15);
             this->display_records_clear_menu();
+            break;
+        case 8:
+            this->draw_screen(0, 10);
+            this->display_add_level_data_menu();
             break;
         default:
             break;
@@ -66,9 +83,9 @@ void Game::display_wallpaper(){
 
 void Game::display_main_menu(){
     EnterCriticalSection(&sc);
-    std::cout << "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿"       << std::endl         
-              << "³                                                                             ³"       << std::endl         
-              << "³       Y                 ÕÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¸                 Y       ³"       << std::endl         
+    std::cout << "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿"       << std::endl
+              << "³                                                                             ³"       << std::endl
+              << "³       Y                 ÕÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¸                 Y       ³"       << std::endl
               << "³      (\")                ³";
 
     if(menu.top().field == 1) SetConsoleTextAttribute(console, (WORD) ((12 << 4) | 7));//ªà á­ë© ä®­, ¡¥«ë© â¥ªáâ
@@ -76,9 +93,9 @@ void Game::display_main_menu(){
     if(menu.top().field == 1) SetConsoleTextAttribute(console, (WORD) ((1 << 4) | 7));//á¨­¨© ä®­, ¡¥«ë© â¥ªáâ
 
     std::cout << "³                (\")      ³" << std::endl         
-              << "³       \\\\                ÔÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¾                //       ³"     << std::endl         
-              << "³        \\\\                                                         //        ³"     << std::endl         
-              << "³         ))              ÕÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¸              ((         ³"       << std::endl         
+              << "³       \\\\                ÔÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¾                //       ³"     << std::endl
+              << "³        \\\\                                                         //        ³"     << std::endl 
+              << "³         ))              ÕÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¸              ((         ³"       << std::endl
               << "³        //               ³";
 
     if(menu.top().field == 2) SetConsoleTextAttribute(console, (WORD) ((12 << 4) | 7));//ªà á­ë© ä®­, ¡¥«ë© â¥ªáâ
@@ -130,6 +147,48 @@ void Game::display_main_menu(){
               << "³                                                                             ³"       << std::endl         
               << "ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ"       << std::endl;
     LeaveCriticalSection(&sc);
+}
+
+void Game::display_level_choice(){
+
+}
+
+void Game::display_add_level_menu(){
+     EnterCriticalSection(&sc);
+     std::cout << "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿"       << std::endl
+               << "³                                                                             ³"       << std::endl
+               << "³                         ÕÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¸                         ³"       << std::endl
+               << "³                         ³";
+
+     if(menu.top().field == 1) SetConsoleTextAttribute(console, (WORD) ((12 << 4) | 7));//ªà á­ë© ä®­, ¡¥«ë© â¥ªáâ
+     std::cout << "        ADD LEVEL        ";
+     if(menu.top().field == 1) SetConsoleTextAttribute(console, (WORD) ((1 << 4) | 7));//á¨­¨© ä®­, ¡¥«ë© â¥ªáâ
+
+     std::cout << "³                         ³"                                                           << std::endl
+               << "³                         ÔÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¾                         ³"       << std::endl
+               << "³                                                                             ³"       << std::endl
+               << "³                         ÕÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¸                         ³"       << std::endl
+               << "³                         ³";
+
+     if(menu.top().field == 2) SetConsoleTextAttribute(console, (WORD) ((12 << 4) | 7));//ªà á­ë© ä®­, ¡¥«ë© â¥ªáâ
+     std::cout << "      DELETE LEVELS      ";
+     if(menu.top().field == 2) SetConsoleTextAttribute(console, (WORD) ((1 << 4) | 7));//á¨­¨© ä®­, ¡¥«ë© â¥ªáâ
+
+     std::cout << "³                         ³"                                                           << std::endl
+               << "³                         ÔÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¾                         ³"       << std::endl
+               << "³                                                                             ³"       << std::endl
+               << "³                         ÕÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¸                         ³"       << std::endl
+               << "³                         ³";
+
+     if(menu.top().field == 3) SetConsoleTextAttribute(console, (WORD) ((12 << 4) | 7));//ªà á­ë© ä®­, ¡¥«ë© â¥ªáâ
+     std::cout << "          <BACK          ";
+     if(menu.top().field == 3) SetConsoleTextAttribute(console, (WORD) ((1 << 4) | 7));//á¨­¨© ä®­, ¡¥«ë© â¥ªáâ
+
+     std::cout << "³                         ³"                                                           << std::endl
+               << "³                         ÔÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¾                         ³"       << std::endl
+               << "³                                                                             ³"       << std::endl
+               << "ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ"       << std::endl;
+     LeaveCriticalSection(&sc);
 }
 
 void Game::display_settings_menu(){
@@ -239,7 +298,7 @@ void Game::display_settings_menu(){
               << "³                         ³";
 
     if(menu.top().field == 7) SetConsoleTextAttribute(console, (WORD) ((12 << 4) | 7));//ªà á­ë© ä®­, ¡¥«ë© â¥ªáâ
-    std::cout << "          EXIT           ";
+    std::cout << "         <BACK           ";
     if(menu.top().field == 7) SetConsoleTextAttribute(console, (WORD) ((1 << 4) | 7));//á¨­¨© ä®­, ¡¥«ë© â¥ªáâ
 
     std::cout << "³                         ³" << std::endl
@@ -300,7 +359,7 @@ void Game::display_records_menu(){
               << "³                         ³";
 
     if(menu.top().field == 1) SetConsoleTextAttribute(console, (WORD) ((12 << 4) | 7));//ªà á­ë© ä®­, ¡¥«ë© â¥ªáâ
-    std::cout << "           OK            ";
+    std::cout << "          <BACK          ";
     if(menu.top().field == 1) SetConsoleTextAttribute(console, (WORD) ((1 << 4) | 7));//á¨­¨© ä®­, ¡¥«ë© â¥ªáâ
 
     std::cout << "³                         ³" << std::endl
@@ -341,7 +400,7 @@ void Game::display_info_menu(){
               << "³                          ³";
 
     if(menu.top().field == 1) SetConsoleTextAttribute(console, (WORD) ((12 << 4) | 7));//ªà á­ë© ä®­, ¡¥«ë© â¥ªáâ
-    std::cout << "           OK            ";
+    std::cout << "          <BACK          ";
     if(menu.top().field == 1) SetConsoleTextAttribute(console, (WORD) ((1 << 4) | 7));//á¨­¨© ä®­, ¡¥«ë© â¥ªáâ
 
     std::cout << "³                        ³" << std::endl
@@ -410,6 +469,94 @@ void Game::display_records_clear_menu(){
     LeaveCriticalSection(&sc);
 }
 
+void Game::display_add_level_data_menu(){
+    EnterCriticalSection(&sc);
+    std::cout << "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿"       << std::endl
+              << "³                                                                             ³"       << std::endl
+              << "³                                  ADD LEVEL                                  ³"       << std::endl
+              << "³                                                                             ³"       << std::endl
+              << "³ ÉÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ» ³"       << std::endl
+              << "³ º                                                                         º ³"       << std::endl
+              << "³ º       ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿  º ³"       << std::endl
+              << "³ º ";
+
+    if(menu.top().field == 1) SetConsoleTextAttribute(console, (WORD) ((12 << 4) | 7));//ªà á­ë© ä®­, ¡¥«ë© â¥ªáâ
+    std::cout << "PATH:";
+    if(menu.top().field == 1) SetConsoleTextAttribute(console, (WORD) ((1 << 4) | 7));//á¨­¨© ä®­, ¡¥«ë© â¥ªáâ
+
+    //60 symbols
+    int32_t len = menu.top().stropt[0].length();
+    if(len <= 60){
+        std::cout << " ³ " << menu.top().stropt[0] << String(60 - len, ' ');
+    }else{
+        std::cout << " ³" << menu.top().stropt[0].substr(len-61, 61);
+    }
+
+    std::cout << " ³  º ³" << std::endl
+              << "³ º       ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ  º ³"       << std::endl
+              << "³ º                                                                         º ³"       << std::endl
+              << "³ º        ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿                               º ³"       << std::endl
+              << "³ º ";
+
+    if(menu.top().field == 2) SetConsoleTextAttribute(console, (WORD) ((12 << 4) | 7));//ªà á­ë© ä®­, ¡¥«ë© â¥ªáâ
+    std::cout << "NAME:";
+    if(menu.top().field == 2) SetConsoleTextAttribute(console, (WORD) ((1 << 4) | 7));//á¨­¨© ä®­, ¡¥«ë© â¥ªáâ
+
+    //30 symbols
+    len = menu.top().stropt[1].length();
+    if(len <= 30){
+        std::cout << "  ³ " << menu.top().stropt[1] << String(30 - len, ' ');
+    }else{
+        std::cout << "  ³" << menu.top().stropt[1].substr(len-31, 31);
+    }
+
+    std::cout << " ³                               º ³" << std::endl
+              << "³ º        ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ                               º ³"       << std::endl
+              << "³ º                                                                         º ³"       << std::endl
+              << "³ º        ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿                               º ³"       << std::endl
+              << "³ º ";
+
+    if(menu.top().field == 3) SetConsoleTextAttribute(console, (WORD) ((12 << 4) | 7));//ªà á­ë© ä®­, ¡¥«ë© â¥ªáâ
+    std::cout << "AUTHOR:";
+    if(menu.top().field == 3) SetConsoleTextAttribute(console, (WORD) ((1 << 4) | 7));//á¨­¨© ä®­, ¡¥«ë© â¥ªáâ
+
+    //30 symbols
+    len = menu.top().stropt[2].length();
+    if(len <= 30){
+        std::cout << "³ " << menu.top().stropt[2] << String(30 - len, ' ');
+    }else{
+        std::cout << "³" << menu.top().stropt[2].substr(len-31, 31);
+    }
+
+    std::cout << " ³                               º ³"       << std::endl
+              << "³ º        ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ                               º ³"       << std::endl
+              << "³ º                                                                         º ³"       << std::endl
+              << "³ º                       ÕÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¸                       º ³"       << std::endl
+              << "³ º                       ³";
+
+    if(menu.top().field == 4) SetConsoleTextAttribute(console, (WORD) ((12 << 4) | 7));//ªà á­ë© ä®­, ¡¥«ë© â¥ªáâ
+    std::cout << "          SAVE           ";
+    if(menu.top().field == 4) SetConsoleTextAttribute(console, (WORD) ((1 << 4) | 7));//á¨­¨© ä®­, ¡¥«ë© â¥ªáâ
+
+    std::cout << "³                       º ³"       << std::endl
+              << "³ º                       ÔÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¾                       º ³"       << std::endl
+              << "³ º                                                                         º ³"       << std::endl
+              << "³ ÈÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¼ ³"       << std::endl
+              << "³                                                                             ³"       << std::endl
+              << "³                         ÕÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¸                         ³"       << std::endl
+              << "³                         ³";
+
+    if(menu.top().field == 5) SetConsoleTextAttribute(console, (WORD) ((12 << 4) | 7));//ªà á­ë© ä®­, ¡¥«ë© â¥ªáâ
+    std:: cout << "          <BACK          ";
+    if(menu.top().field == 5) SetConsoleTextAttribute(console, (WORD) ((1 << 4) | 7));//á¨­¨© ä®­, ¡¥«ë© â¥ªáâ
+
+    std::cout << "³                         ³"       << std::endl
+              << "³                         ÔÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¾                         ³"       << std::endl
+              << "³                                                                             ³"       << std::endl
+              << "ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ"       << std::endl;
+    LeaveCriticalSection(&sc);
+}
+
 void Game::eventExec(){
     //EnterCriticalSection(&sc);
     int8_t key;
@@ -418,6 +565,12 @@ void Game::eventExec(){
         switch(menu.top().screen){
             case 0:
                 this->event_main_menu(key);
+                break;
+            case 1:
+                this->event_level_choice(key);
+                break;
+            case 2:
+                this->event_add_level_menu(key);
                 break;
             case 3:
                 this->event_settings_menu(key);
@@ -433,6 +586,9 @@ void Game::eventExec(){
                 break;
             case 7:
                 this->event_records_clear_menu(key);
+            case 8:
+                this->event_add_level_data_menu(key);
+                break;
             default:
                 break;
         }
@@ -468,10 +624,62 @@ void Game::event_main_menu(int8_t key){
         case 13://enter
             menu.push(display(menu.top().field, 1));
             this->bell();
+            if(menu.top().screen != 6){
+                system("cls");
+                this->display_wallpaper();
+            }
             this->display_menu();
             break;
         case 77://strelka vpravo
         case 75://strelka vlevo
+        default:
+            break;
+    }
+}
+
+void Game::event_add_level_menu(int8_t key){
+    switch(key){
+        case 27://esc
+            this->event_info_menu(key);
+            break;
+        case 72://strelka vverh
+            if(menu.top().field == 1){
+                menu.top().field = 3;
+            }else{
+                menu.top().field -= 1;
+            }
+            this->bell();
+            this->display_menu();
+            break;
+        case 80://strelka vniz
+            if(menu.top().field == 3){
+                menu.top().field = 1;
+            }else{
+                menu.top().field += 1;
+            }
+            this->bell();
+            this->display_menu();
+            break;
+        case 13://enter
+            switch(menu.top().field){
+                case 1:
+                    menu.push(display(8, 1));
+                    menu.top().stropt.resize(3);
+                    this->bell();
+                    this->display_menu();
+                    break;
+                case 2:
+                    break;
+                case 3:
+                    this->event_info_menu(key);
+                    break;
+                default:
+                    break;
+            }
+            break;
+        case 77://strelka vpravo
+        case 75://strelka vlevo
+            break;
         default:
             break;
     }
@@ -528,12 +736,16 @@ void Game::event_settings_menu(int8_t key){
             if(menu.top().field == 6){
                 settings.setSave();
                 menu.pop();
+                system("cls");
+                this->bell();
             }else if(menu.top().field == 7){
                 menu.pop();
+                system("cls");
+                this->bell();
             }else{
                 menu.top().field += 1;
-            }
             this->bell();
+            }
             this->display_menu();
             break;
         default:
@@ -669,6 +881,100 @@ void Game::event_records_clear_menu(int8_t key){
     }
 }
 
+void Game::event_add_level_data_menu(int8_t key){
+    if(key == 27){
+        menu.pop();
+        this->bell();
+        system("cls");
+        this->display_wallpaper();
+        this->display_menu();
+        return;
+    }
+    if(menu.top().field > 3){
+        switch(key){
+        case 72://strelka vverh
+            menu.top().field -= 1;
+            this->bell();
+            this->display_menu();
+            break;
+        case 80://strelka vniz
+            if(menu.top().field == 5){
+                menu.top().field = 1;
+            }else{
+                menu.top().field += 1;
+            }
+            this->bell();
+            this->display_menu();
+            break;
+        case 13://enter
+            if(menu.top().field == 5){
+                this->event_add_level_data_menu(27);
+            }else{
+                lvl.save_level(menu.top().stropt);
+                menu.pop();
+                menu.pop();
+                menu.push(display(1, 1));
+                this->bell();
+                system("cls");
+                this->display_wallpaper();
+                this->display_menu();
+            }
+            break;
+        default:
+            break;
+        }
+    }else{
+        //text
+        String &str = menu.top().stropt[menu.top().field-1];
+        if((key >= -128 && key <= -81) ||
+           (key >= -32  && key <= -15) ||
+            key == -4                  ||
+           (key >= 32   && key <= 126)
+          ){
+            str += String(1, key);
+            this->pick();
+            this->display_menu();
+        }else if(key == 8){//backspace
+            if(str.length()){
+                str = str.substr(0, str.length()-1);
+                this->pick();
+                this->display_menu();
+            }
+        }else if(key == 13){//enter
+            menu.top().field += 1;
+            this->bell();
+            this->display_menu();
+        }else if(key == 9){
+            if(menu.top().field == 3){
+                menu.top().field = 1;
+            }else{
+                menu.top().field += 1;
+            }
+            this->bell();
+            this->display_menu();
+        }
+    }
+}
+
+void Game::event_level_choice(int8_t key){
+    switch(key){
+        case 27://esc
+            break;
+        case 72://strelka vverh
+            break;
+        case 80://strelka vniz
+            break;
+        case 77://strelka vpravo
+            break;
+        case 75://strelka vlevo
+            break;
+        case 13://enter
+            break;
+        default:
+            break;
+    }
+}
+
 /*
 void Game::event_(int8_t key){
     switch(key){
@@ -704,6 +1010,18 @@ void Game::bell(){
     //MessageBeep(MB_ICONQUESTION);//­¥ à ¡®â ¥â
     //MessageBeep(MB_ICONEXCLAMATION);//®è¨¡ª 
     //MessageBeep(MB_ICONASTERISK);//á®åà ­¨âì
+}
+
+void Game::pick(){
+    if(settings.setReturn(3))
+        Beep(600, 100);
+}
+
+void Game::draw_screen(uint32_t x, uint32_t y){
+    COORD xory;
+    xory.X = x;
+    xory.Y = y;
+    SetConsoleCursorPosition(console, xory);
 }
 
 

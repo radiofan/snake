@@ -6,6 +6,7 @@
 Settings::Settings(void)
     :recordsInit(false), set(5){
         this->setRead();
+        this->levelsRead();
 }
 
 bool Settings::recordsRead(){
@@ -299,6 +300,41 @@ bool Settings::clearSectionIni(String section){
         return true;
     }
     return false;
+}
+
+
+bool Settings::levelsRead(){
+    /*
+    String str;
+    uint16_t count = 0;
+    str = this->readIni(_T("records"), _T("count"));
+    if(str == _T("")){
+        this->writeIni(_T("records"), _T("count"), _T("0"));
+    }else{
+        count = std::stoul(str.substr(0,4));
+    }
+    lvl_list.resize(count);
+
+    for(uint16_t i=0; i<count; i++){
+        lvl_list[i] = this->readIni(_T("levels"), _T("level")+std::to_string(i));
+    }
+    return count;
+    */
+
+    WIN32_FIND_DATA data;
+    HANDLE finder = FindFirstFile(_T(".\\levels\\*.lvl"), &data);
+    if(finder != INVALID_HANDLE_VALUE){
+        do{
+            lvl_list.push_back(data.cFileName);
+        }while(FindNextFile(finder, &data) != 0);
+        FindClose(finder);
+        return true;
+    }
+    return false;
+}
+
+std::vector<String> &Settings::levelsReturn(){
+    return lvl_list;
 }
 
 
