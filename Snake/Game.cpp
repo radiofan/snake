@@ -5,7 +5,7 @@
 extern CRITICAL_SECTION sc;
 
 Game::Game(void)
-    :lvl(settings.levelsReturn()), done(0), console(GetStdHandle(STD_OUTPUT_HANDLE)), events(&Game::eventExec, this){
+    :lvl(settings.levelsReturn(), (colors) settings.setReturn(1)), done(0), console(GetStdHandle(STD_OUTPUT_HANDLE)), events(&Game::eventExec, this){
 
     menu.push(display(0, 1));
     system("color 17");//แญฎขญฎฉ ญ กฎเ - แจญจฉ ไฎญ, กฅซ๋ฉ โฅชแโ
@@ -150,7 +150,75 @@ void Game::display_main_menu(){
 }
 
 void Game::display_level_choice(){
+    EnterCriticalSection(&sc);
+    //N - 69 symbols
+    //name - 65 symbols
+    //author - 63 symbols
+    //notice - 63 symbols
+    std::cout << "ฺฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฟ" << std::endl
+              << "ณ                                                                             ณ" << std::endl
+              << "ณ                   <ฤฤฤฤฤฤฤ     CHOICE LEVEL     ฤฤฤฤฤฤฤ>                    ณ" << std::endl
+              << "ณ                                                                             ณ" << std::endl
+              << "ณ ษอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออป ณ" << std::endl
+              << "ณ บ                                                                         บ ณ" << std::endl
+              << "ณ บ ü ";
+    String str = lvl.get_level_option(0).substr(0, 69);
+    std::cout << str << String(69 - str.length(), ' ') << " บ ณ" << std::endl
+              << "ณ บ                                                                         บ ณ" << std::endl
+              << "ณ บ NAME: ";
+    str = lvl.get_level_option(1).substr(0, 65);
+    std::cout << str << String(65 - str.length(), ' ') << " บ ณ" << std::endl
+              << "ณ บ                                                                         บ ณ" << std::endl
+              << "ณ บ AUTHOR: ";
+    str = lvl.get_level_option(2).substr(0, 63);
+    std::cout << str << String(63-str.length(), ' ') << " บ ณ" << std::endl;
+    if(lvl.error.erorrs.size()){
+        std::cout << "ณ บ                                                                         บ ณ" << std::endl
+                  << "ณ บ NOTICE:                                                                 บ ณ" << std::endl;
+        if(!lvl.error.success)
+            std::cout << "ณ บ                                                                         บ ณ" << std::endl
+                      << "ณ บ       > !!!VALIDATION FAILED!!!                                         บ ณ" << std::endl;
+        for(uint32_t i=0; i<lvl.error.erorrs.size(); i++){
+            str = _T("[ERORR ") + std::to_string(lvl.error.erorrs[i].key) + _T("] ") + lvl.error.erorrs[i].message;
+            std::cout << "ณ บ                                                                         บ ณ" << std::endl
+                      << "ณ บ       > " << str.substr(0, 63);
+            if(str.length()>63){
+                for(uint16_t i1=63; i1<str.length(); i1 += 63){
+                    std::cout << " บ ณ" << std::endl << "ณ บ         " << str.substr(i1, 63);
+                }
+            }
+            if(str.length()%63)
+                std::cout << String(63 - (str.length()%63),' ');
+            std::cout << " บ ณ" << std::endl;
+        }
+    }
+    std::cout << "ณ บ                                                                         บ ณ" << std::endl
+              << "ณ ศอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออผ ณ" << std::endl
+              << "ณ                                                                             ณ" << std::endl;
+    if(lvl.error.success)
+        std::cout << "ณ                         ีอออออออออออออออออออออออออธ                         ณ" << std::endl
+                  << "ณ                         ณ          START          ณ                         ณ" << std::endl
+                  << "ณ                         ิอออออออออออออออออออออออออพ                         ณ" << std::endl
+                  << "ณ                                                                             ณ" << std::endl;
 
+    std::cout << "ณ                         ีอออออออออออออออออออออออออธ                         ณ" << std::endl
+              << "ณ                         ณ          DELETE         ณ                         ณ" << std::endl
+              << "ณ                         ิอออออออออออออออออออออออออพ                         ณ" << std::endl
+              << "ณ                                                                             ณ" << std::endl
+              << "ณ                         ีอออออออออออออออออออออออออธ                         ณ" << std::endl
+              << "ณ                         ณ          <BACK          ณ                         ณ" << std::endl
+              << "ณ                         ิอออออออออออออออออออออออออพ                         ณ" << std::endl
+              << "ณ                                                                             ณ" << std::endl
+              << "ภฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤู" << std::endl;
+    if(lvl.error.success){
+        std::cout << "ษอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออป" << std::endl
+                  << "บ                                LEVEL PREVIEW                                บ" << std::endl
+                  << "ศอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออผ" << std::endl
+                  << std::endl;
+        lvl.level_draw();
+    }
+
+    LeaveCriticalSection(&sc);
 }
 
 void Game::display_add_level_menu(){
@@ -637,6 +705,25 @@ void Game::event_main_menu(int8_t key){
     }
 }
 
+void Game::event_level_choice(int8_t key){
+    switch(key){
+        case 27://esc
+            break;
+        case 72://strelka vverh
+            break;
+        case 80://strelka vniz
+            break;
+        case 77://strelka vpravo
+            break;
+        case 75://strelka vlevo
+            break;
+        case 13://enter
+            break;
+        default:
+            break;
+    }
+}
+
 void Game::event_add_level_menu(int8_t key){
     switch(key){
         case 27://esc
@@ -953,25 +1040,6 @@ void Game::event_add_level_data_menu(int8_t key){
             this->bell();
             this->display_menu();
         }
-    }
-}
-
-void Game::event_level_choice(int8_t key){
-    switch(key){
-        case 27://esc
-            break;
-        case 72://strelka vverh
-            break;
-        case 80://strelka vniz
-            break;
-        case 77://strelka vpravo
-            break;
-        case 75://strelka vlevo
-            break;
-        case 13://enter
-            break;
-        default:
-            break;
     }
 }
 

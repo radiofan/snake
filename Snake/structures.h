@@ -44,6 +44,10 @@ struct err{
 
 struct ERORR{
     ERORR(bool suc = 1): success(suc){};
+    void clear(){
+        success = true;
+        erorrs.clear();
+    }
     bool success;
     std::vector<err> erorrs;
 };

@@ -34,17 +34,17 @@ void Box::create(std::vector<String> &mapka){
 }
 
 //дать высоту
-uint32_t Box::get_h(){
+uint16_t Box::get_h(){
     return box.size();
 }
 
 //дать ширину
-uint32_t Box::get_w(){
+uint16_t Box::get_w(){
     return box[0].size();
 }
 
 //дать €чейку
-uint8_t Box::get_tile(uint32_t x, uint32_t y){
+uint8_t Box::get_tile(uint16_t x, uint16_t y){
     if(x >= this->get_w() || y >= this->get_h()){
         std::cout << "ERROR: Box::get_tile(" << x << ", " << y << ") can't return result. Box_w=" 
         << this->get_w() << " Box_h=" << this->get_h() << std::endl;

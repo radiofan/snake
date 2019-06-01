@@ -3,7 +3,7 @@
 #include "structures.h"
 
 
-Snake::Snake(void){
+Snake::Snake(colors colour){
 
 }
 

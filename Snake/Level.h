@@ -10,6 +10,9 @@ class Level{
         empty_space space;
 
         std::vector<String> &level_list;
+        int32_t level_number;
+        String  level_name;
+        String  level_author;
 
         //Читает построчно файл в вектор ret
         //Ошибки в error
@@ -35,7 +38,7 @@ class Level{
 
         //Level(String link = "");
         
-        Level(std::vector<String> &lvl_list);
+        Level(std::vector<String> &lvl_list, colors color);
         //Создает карту box из вектора строк
         //Возвращает код ошибки
         //0 - успех
@@ -49,6 +52,16 @@ class Level{
         * options[2] - author
         */
         ERORR &save_level(std::vector<String> options);
+
+        /*
+        * Возвращает
+        * 0 - level_number + 1
+        * 1 - level_name
+        * 2 - level_author
+        */
+        String get_level_option(uint8_t a=0);
+
+        void level_draw();
 
 
         ~Level(void);
