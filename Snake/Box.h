@@ -14,6 +14,7 @@ class Box{
         uint16_t get_w();//дать ширину
         uint8_t  get_tile(uint16_t x, uint16_t y);//дать €чейку
         map     &get_box();//дать ссылку на карту
+        void clear();//очистка
 
         ~Box(void);
 };

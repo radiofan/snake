@@ -8,7 +8,7 @@
 
 Game::Game(void)
     //:lvl(settings.levelsReturn(), (colors) settings.setReturn(1)), done(0), console(GetStdHandle(STD_OUTPUT_HANDLE)), events(&Game::eventExec, this){
-    :lvl(settings.levelsReturn(), (colors) settings.setReturn(1), settings.setReturn(0)), done(0), console(GetStdHandle(STD_OUTPUT_HANDLE)){
+    :lvl(settings.levelsReturn(), settings.setLinkReturn(1), settings.setLinkReturn(0)), done(0), console(GetStdHandle(STD_OUTPUT_HANDLE)){
 
     CONSOLE_CURSOR_INFO cursor_info;
     GetConsoleCursorInfo(console,&cursor_info);
@@ -343,22 +343,22 @@ void Game::display_settings_menu(){
 
     if(menu.top().field == 3) SetConsoleTextAttribute(console, (WORD) ((2 << 4) | (settings.setReturn(1))));//§¥«¥­ë© ä®­, ‡Œ…ˆ›‰ â¥ªáâ
     switch(settings.setReturn(1)){
-        case RED:
+        case 4:
             std::cout << LANG::BUTT_RED[settings.setReturn(0)];
             break;
-        case BLUE:
+        case 9:
             std::cout << LANG::BUTT_BLUE[settings.setReturn(0)];
             break;
-        case GREEN:
+        case 10:
             std::cout << LANG::BUTT_GREEN[settings.setReturn(0)];
             break;
-        case CYAN:
+        case 11:
             std::cout << LANG::BUTT_CYAN[settings.setReturn(0)];
             break;
-        case YELLOW:
+        case 14:
             std::cout << LANG::BUTT_YELLOW[settings.setReturn(0)];
             break;
-        case WHITE:
+        case 15:
             std::cout << LANG::BUTT_WHITE[settings.setReturn(0)];
             break;
     }
@@ -712,7 +712,7 @@ void Game::display_level_preview(){
     std::cout << "É" << String(size.X - 3, 'Í') << "»" << std::endl
               << "º" << String((size.X - 27)/2, ' ') << LANG::BUTT_LVL_PREV[settings.setReturn(0)] << String((size.X - 28)/2 + (size.X - 28)%2, ' ') << "º" << std::endl
               << "È" << String(size.X - 3, 'Í') << "¼" << std::endl << std::endl;
-    lvl.level_draw();
+    lvl.level_preview();
     if(lvl.error.erorrs.size()){
         std::cout << std::endl
                   << LANG::WORD_NOTICE[settings.setReturn(0)] << std::endl;

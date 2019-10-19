@@ -20,6 +20,7 @@ struct display{
 };
 
 //змея(9, 4, A, B, E, F)
+/*
 enum colors{
     RED = 4,
     BLUE = 9,
@@ -28,6 +29,7 @@ enum colors{
     YELLOW = 14,
     WHITE = 15
 };
+*/
 
 struct record{
     record(String name=_T("%NONAME%"), String level=_T("%NOLEVEL%"), uint64_t result=0): name(name, 0, 65), level(level, 0, 62), result(result){};
@@ -56,6 +58,23 @@ struct coord{
     coord(int32_t X=0, int32_t Y=0): x(X), y(Y){};
     int32_t x;
     int32_t y;
+};
+coord operator+ (const coord &c1, const coord &c2);
+coord operator- (const coord &c1, const coord &c2);
+bool operator== (const coord &c1, const coord &c2);
+
+//Хранит координаты углов, начала и конца; также символ
+struct snake_piece{
+    snake_piece(coord locate=coord(-1, -1), char symbol=0): location(locate), symb(symbol){};
+    coord location;
+    char symb;
+};
+
+//Хранит символ змеи и длину покраски змеи
+struct snake_slice{
+    snake_slice(char symbol, int64_t length): symb(symbol), len(length){};
+    char symb;
+    int64_t len;
 };
 
 typedef std::vector<coord> empty_space;

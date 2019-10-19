@@ -4,8 +4,8 @@
 #include "structures.h"
 #include "UI_and_lang_constants.h"
 
-Level::Level(std::vector<String> &lvl_list, colors color, int32_t lang)
-    :snake(color), level_list(lvl_list), level_number(-1), lg(lang){
+Level::Level(std::vector<String> &lvl_list, int16_t &color, int16_t &lang)
+    :snake(color), meat_ready(false), level_list(lvl_list), level_number(-1), lg(lang), generator(std::random_device()()){
         this->default_level();
 }
 
@@ -13,10 +13,12 @@ Level::Level(std::vector<String> &lvl_list, colors color, int32_t lang)
 ERORR &Level::save_level(std::vector<String> options){
 
     std::vector<String> file;
-    error.clear();
+
+    this->data_clear();
+
     level_name = options[1];
     level_author = options[2];
-    level_number = -2;
+
     this->read_file(options[0], file);
     
     if(error.success){
@@ -146,6 +148,7 @@ bool Level::analys_file(std::vector<String> &file){
                         file[y][x] = '2';
                         error.erorrs.push_back(err(0x00, LANG::TEXT_ERR_USTART[lg] + std::to_string(x+1) + _T("; ") + std::to_string(y+1) + _T("]")));
                         start = true;
+                        snake.set_start(coord(x, y), 0);
                     }
                     break;
                 case '3':
@@ -161,6 +164,7 @@ bool Level::analys_file(std::vector<String> &file){
                         file[y][x] = '3';
                         error.erorrs.push_back(err(0x00, LANG::TEXT_ERR_RSTART[lg] + std::to_string(x+1) + _T("; ") + std::to_string(y+1) + _T("]")));
                         start = true;
+                        snake.set_start(coord(x, y), 1);
                     }
                     break;
                 case '4':
@@ -177,6 +181,7 @@ bool Level::analys_file(std::vector<String> &file){
                         file[y][x] = '4';
                         error.erorrs.push_back(err(0x00, LANG::TEXT_ERR_DSTART[lg] + std::to_string(x+1) + _T("; ") + std::to_string(y+1) + _T("]")));
                         start = true;
+                        snake.set_start(coord(x, y), 2);
                     }
                     break;
                 case '5':
@@ -192,6 +197,7 @@ bool Level::analys_file(std::vector<String> &file){
                         file[y][x] = '5';
                         error.erorrs.push_back(err(0x00, LANG::TEXT_ERR_LSTART[lg] + std::to_string(x+1) + _T("; ") + std::to_string(y+1) + _T("]")));
                         start = true;
+                        snake.set_start(coord(x, y), 3);
                     }
                     break;
                 case '6':
@@ -207,6 +213,8 @@ bool Level::analys_file(std::vector<String> &file){
                         file[y][x] = '6';
                         error.erorrs.push_back(err(0x00, LANG::TEXT_ERR_RANDSTART[lg] + std::to_string(x+1) + _T("; ") + std::to_string(y+1) + _T("]")));
                         start = true;
+                        std::uniform_int_distribution<int8_t> dist(0, 3);
+                        snake.set_start(coord(x, y), dist(generator));
                     }
                     break;
                 case '0':
@@ -275,17 +283,85 @@ void Level::level_draw(){
     HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
     GetConsoleScreenBufferInfo(console, &info);
     WORD concolor = info.wAttributes;
+
+    //int64_t time_color = -1;
+    //bool draw_box = true;
+    char next_char = 0;
+    snake_slice slice(0, -1);
+
     for(uint16_t y=0; y<box.get_h(); y++){
-        SetConsoleTextAttribute(console, (WORD) ((2 << 4) | 0));//зелёный фон, серый текст
+        SetConsoleTextAttribute(console, (WORD) ((2 << 4) | 0));//зелёный фон, черный текст
         for(uint16_t x=0; x<box.get_w(); x++){
-            if(box.get_tile(x, y)){
+            //рисуем мясо
+            if(slice.len == 0){
+                SetConsoleTextAttribute(console, (WORD) ((2 << 4) | 0));//зелёный фон, черный текст
+                slice.len -= 1;
+            }else if(slice.len == 1){
+                next_char = 0;
+            }
+            if(meat_ready && coord(x, y) == meat){
+                SetConsoleTextAttribute(console, (WORD) ((2 << 4) | 5));//зелёный фон, лиловый текст
+                //std::cout << "■ o O * @ Q . + ░ ¤ °";
+                std::cout << '*';
+                slice.len = 0;
+                continue;
+            }
+            if(next_char){
+                std::cout << next_char;
+            }else{
+                if(snake.is_ready())
+                    slice = snake.get_snake_slice(coord(x, y));
+                if(slice.len > 0 || slice.len == -2){
+                    SetConsoleTextAttribute(console, (WORD) ((2 << 4) | snake.get_color()));//зелёный фон, ЗМЕИНЫЙ текст
+                    std::cout << slice.symb;
+                    if(slice.len > 2 || slice.len == -2){
+                        next_char = snake.get_snake_slice(coord(x+1, y)).symb;
+                    }
+                }else{
+                    if(box.get_tile(x, y)){
+                        std::cout << '█';
+                    }else{
+                        std::cout << ' ';
+                        //std::cout << y % 10;
+                    }
+                }
+            }
+            if(slice.len > 0)
+                slice.len -= 1;
+        }
+        slice.len = -1;
+        next_char = 0;
+        SetConsoleTextAttribute(console, concolor);//вернем как было
+        std::cout << std::endl;
+    }
+}
+
+void Level::level_preview(){
+    if(!error.success){
+        std::cout << "Не могу нарисовать уровень, анализ уровня не пройден!" << std::endl;
+        system("pause");
+        return;
+    }
+    CONSOLE_SCREEN_BUFFER_INFO info;
+    HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
+    GetConsoleScreenBufferInfo(console, &info);
+    WORD concolor = info.wAttributes;
+    coord snake_head = snake.get_snake_head();
+    for(uint16_t y=0; y<box.get_h(); y++){
+        SetConsoleTextAttribute(console, (WORD) ((2 << 4) | 0));//зелёный фон, черный текст
+        for(uint16_t x=0; x<box.get_w(); x++){
+            if(coord(x, y) == snake_head){
+                SetConsoleTextAttribute(console, (WORD) ((2 << 4) | snake.get_color()));//зелёный фон, ЗМЕИНЫЙ текст
+                std::cout << '@';
+                SetConsoleTextAttribute(console, (WORD) ((2 << 4) | 0));//зелёный фон, черный текст
+            }else if(box.get_tile(x, y)){
                 std::cout << '█';
             }else{
                 std::cout << ' ';
             }
         }
-        SetConsoleTextAttribute(console, concolor);//вернем как было
         std::cout << std::endl;
+        SetConsoleTextAttribute(console, concolor);//вернем как было
     }
 }
 
@@ -299,6 +375,35 @@ void Level::default_level(){
             space[y*30+x] = coord(x, y);
         }
     }
+    /*
+    snake.set_orient(0);
+    //═║╔╗╚╝
+    snake.angles.push_back(snake_piece(coord(2, 2), '═'));//конец
+
+    snake.angles.push_back(snake_piece(coord(1, 2), '╚'));
+    snake.angles.push_back(snake_piece(coord(1, 6), '╗'));
+    snake.angles.push_back(snake_piece(coord(10, 6), '╔'));
+    snake.angles.push_back(snake_piece(coord(10, 8), '╝'));
+    snake.angles.push_back(snake_piece(coord(9, 8), '╚'));
+    snake.angles.push_back(snake_piece(coord(9, 5), '╔'));
+    snake.angles.push_back(snake_piece(coord(10, 5), '╝'));
+    snake.angles.push_back(snake_piece(coord(10, 3), '╗'));
+    snake.angles.push_back(snake_piece(coord(8, 3), '╔'));
+    snake.angles.push_back(snake_piece(coord(8, 8), '╝'));
+    snake.angles.push_back(snake_piece(coord(7, 8), '╚'));
+    snake.angles.push_back(snake_piece(coord(7, 3), '╗'));
+    snake.angles.push_back(snake_piece(coord(6, 3), '╔'));
+    snake.angles.push_back(snake_piece(coord(6, 8), '╝'));
+    snake.angles.push_back(snake_piece(coord(5, 8), '╚'));
+    snake.angles.push_back(snake_piece(coord(5, 3), '╗'));
+    snake.angles.push_back(snake_piece(coord(4, 3), '╔'));
+    snake.angles.push_back(snake_piece(coord(4, 1), '╝'));
+    snake.angles.push_back(snake_piece(coord(2, 1), '╚'));
+
+    snake.angles.push_back(snake_piece(coord(2, 5), '║'));//начало
+    snake.ready = true;
+    */
+
     error.erorrs.push_back(err(0x00, LANG::TEXT_ERR_RANDOM[lg]));
 }
 
@@ -323,11 +428,8 @@ bool Level::load_level(int32_t ind){
         system("pause");
         return false;
     }
-    space.resize(0);
-    level_author = _T("");
-    level_name = _T("");
+    this->data_clear();
     level_number = ind;
-    error.clear();
     if(level_number == -1){
         this->default_level();
         return true;
@@ -353,6 +455,17 @@ bool Level::load_level(int32_t ind){
     }
     return false;
 }
+
+void Level::data_clear(){
+    error.clear();
+    level_name = _T("");
+    level_author = _T("");
+    level_number = -2;
+    space.resize(0);
+    box.clear();
+    snake.clear();
+}
+
 
 Level::~Level(void){
 

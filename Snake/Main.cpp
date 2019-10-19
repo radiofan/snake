@@ -6,6 +6,19 @@
 //CRITICAL_SECTION sc;
 
 
+coord operator+ (const coord &c1, const coord &c2){
+    return coord(c1.x + c2.x, c1.y + c2.y);
+}
+
+coord operator- (const coord &c1, const coord &c2){
+    return coord(c1.x - c2.x, c1.y - c2.y);
+}
+
+bool operator== (const coord &c1, const coord &c2){
+    return (c1.x == c2.x) && (c1.y == c2.y);
+}
+
+
 int _tmain(int argc, _TCHAR* argv[]){
     //std::ios_base::sync_with_stdio(false);
     //InitializeCriticalSection(&sc);
@@ -19,7 +32,7 @@ int _tmain(int argc, _TCHAR* argv[]){
     /*
     system("color 17");//ќсновной набор синий белый
     //system("color 20");//трава зеленый стена черный
-    //€годка желтый(e), зме€(9, 4, A, B, E, F)
+    //€годка лиловый(5), зме€(9, 4, A, B, E, F)
     //std::ifstream file_box("resurses/level0.lvl", std::ios_base::in);
     std::ifstream file_box("resurses/menu.txt", std::ios_base::in);
     std::vector<std::string> pole;

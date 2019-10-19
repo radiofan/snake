@@ -86,6 +86,8 @@ class Settings{
         *  0 - OFF
         */
         int16_t setReturn(int8_t i);
+
+        int16_t &setLinkReturn(int8_t i);
         //Сдвиг указанной настройки (i) на шаг(step) вправо или влево(step<0)
         //0-language, 1-color, 2-complex, 3-menu_sound, 4-game_sound
         bool setStep(int8_t i, int8_t step=1);

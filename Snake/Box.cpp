@@ -60,6 +60,10 @@ map &Box::get_box(){
     return box;
 }
 
+void Box::clear(){
+    box.resize(0);
+}
+
 
 Box::~Box(void){
 

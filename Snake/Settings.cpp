@@ -96,20 +96,20 @@ bool Settings::setRead(){
     //1-color
     str = this->readIni(_T("settings"), _T("color"));
     if(str == _T("RED")){
-        set[1] = RED;
+        set[1] = 4;
     }else if(str == _T("BLUE")){
-        set[1] = BLUE;
+        set[1] = 9;
     }else if(str == _T("GREEN")){
-        set[1] = GREEN;
+        set[1] = 10;
     }else if(str == _T("CYAN")){
-        set[1] = CYAN;
+        set[1] = 11;
     }else if(str == _T("YELLOW")){
-        set[1] = YELLOW;
+        set[1] = 14;
     }else if(str == _T("WHITE")){
-        set[1] = WHITE;
+        set[1] = 15;
     }else{
         this->writeIni(_T("settings"), _T("color"), _T("GREEN"));
-        set[1] = GREEN;
+        set[1] = 10;
     }
     //2-complex
     str = _T("0") + this->readIni(_T("settings"), _T("complex"));
@@ -148,9 +148,13 @@ int16_t Settings::setReturn(int8_t i){
     return set.at(i);
 }
 
+int16_t &Settings::setLinkReturn(int8_t i){
+    return set.at(i);
+}
+
 bool Settings::setStep(int8_t i, int8_t step){
     int8_t shift;
-    colors arr[6] = {RED, BLUE, GREEN, CYAN, YELLOW, WHITE};
+    int8_t arr[6] = {4, 9, 10, 11, 14, 15};
     switch(i){
         case 0:
         case 3:
@@ -167,22 +171,22 @@ bool Settings::setStep(int8_t i, int8_t step){
             if(shift == 0)
                 return true;
             switch(set[1]){
-                case RED:
+                case 4:
                     shift += 1;
                     break;
-                case BLUE:
+                case 9:
                     shift += 2;
                     break;
-                case GREEN:
+                case 10:
                     shift += 3;
                     break;
-                case CYAN:
+                case 11:
                     shift += 4;
                     break;
-                case YELLOW:
+                case 14:
                     shift += 5;
                     break;
-                case WHITE:
+                case 15:
                     shift += 6;
                     break;
             }
@@ -222,22 +226,22 @@ bool Settings::setSave(){
         ret = false;
     //1-color
     switch(set[1]){
-        case RED:
+        case 4:
             str = _T("RED");
             break;
-        case BLUE:
+        case 9:
             str = _T("BLUE");
             break;
-        case GREEN:
+        case 10:
             str = _T("RED");
             break;
-        case CYAN:
+        case 11:
             str = _T("CYAN");
             break;
-        case YELLOW:
+        case 14:
             str = _T("YELLOW");
             break;
-        case WHITE:
+        case 15:
             str = _T("WHITE");
             break;
     }

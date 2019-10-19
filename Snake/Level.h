@@ -8,13 +8,15 @@ class Level{
         Snake snake;
         Box   box;
         empty_space space;
+        bool meat_ready;
+        coord meat;
 
         std::vector<String> &level_list;
         int32_t level_number;
         String  level_name;
         String  level_author;
 
-        int32_t lg;
+        int16_t &lg;
 
         //Читает построчно файл в вектор ret
         //Ошибки в error
@@ -38,9 +40,11 @@ class Level{
         */
         ERORR error;
 
+        std::mt19937 generator;
+
         //Level(String link = "");
         
-        Level(std::vector<String> &lvl_list, colors color, int32_t lang);
+        Level(std::vector<String> &lvl_list, int16_t &color, int16_t &lang);
         //Создает карту box из вектора строк
         //Возвращает код ошибки
         //0 - успех
@@ -75,9 +79,13 @@ class Level{
         
         bool load_level(int32_t ind = -1);
 
-        void level_draw();
-
         void default_level();
+
+        void level_draw();
+        void level_preview();
+
+
+        void data_clear();
 
 
         ~Level(void);
