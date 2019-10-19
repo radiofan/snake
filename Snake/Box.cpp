@@ -48,6 +48,7 @@ uint8_t Box::get_tile(uint16_t x, uint16_t y){
     if(x >= this->get_w() || y >= this->get_h()){
         std::cout << "ERROR: Box::get_tile(" << x << ", " << y << ") can't return result. Box_w=" 
         << this->get_w() << " Box_h=" << this->get_h() << std::endl;
+        system("pause");
         return 255;
     }else{
         return box[y][x];

@@ -16,7 +16,7 @@ class Game{
         //std::vector<func> handlers;
 
         HANDLE console;
-        std::thread events;
+        //std::thread events;
         
         void display_menu();
         void display_wallpaper();
@@ -38,6 +38,10 @@ class Game{
         void display_records_clear_menu();
         //8-screen
         void display_add_level_data_menu();
+        //9-screen
+        void display_level_preview();
+        //10-screen
+        void display_delete_menu();
 
         //0-screen
         void event_main_menu(int8_t key);
@@ -57,6 +61,10 @@ class Game{
         void event_records_clear_menu(int8_t key);
         //8-screen
         void event_add_level_data_menu(int8_t key);
+        //9-screen
+        void event_level_preview(int8_t key);
+        //10-screen
+        void event_delete_menu(int8_t key);
 
     public:
         Game(void);

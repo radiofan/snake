@@ -3,12 +3,12 @@
 #include "structures.h"
 
 
-CRITICAL_SECTION sc;
+//CRITICAL_SECTION sc;
 
 
 int _tmain(int argc, _TCHAR* argv[]){
     //std::ios_base::sync_with_stdio(false);
-    InitializeCriticalSection(&sc);
+    //InitializeCriticalSection(&sc);
     SetConsoleCP(866);
 	SetConsoleOutputCP(866);
     

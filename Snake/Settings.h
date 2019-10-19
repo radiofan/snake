@@ -21,7 +21,25 @@ class Settings{
         void recordsSort();
         bool recordsInit;
 
-        //0-language, 1-color, 2-complex, 3-menu_sound, 4-game_sound
+        /*
+        * 0-language:
+        *  0 - english
+        *  1 - russian
+        *
+        * 1-color
+        *  (colors) RED, BLUE, GREEN, CYAN, YELLOW, WHITE
+        *
+        * 2-complex(сложность)
+        *  [1; 10]
+        *
+        * 3-menu_sound
+        *  1 - ON
+        *  0 - OFF
+        *
+        * 4-game_sound
+        *  1 - ON
+        *  0 - OFF
+        */
         std::vector<int16_t> set;
         //Инициализирует настройки
         //Возвращает true
@@ -47,8 +65,26 @@ class Settings{
         //Возвращает false если что-то пошло не так, true если всё удачно
         bool recordsDelete();
 
-        //Возвращает настройку
-        //0-language, 1-color, 2-complex, 3-menu_sound, 4-game_sound
+        /*
+        * Возвращает настройку
+        * 0-language:
+        *  0 - english
+        *  1 - russian
+        *
+        * 1-color
+        *  (colors) RED, BLUE, GREEN, CYAN, YELLOW, WHITE
+        *
+        * 2-complex(сложность)
+        *  [1; 10]
+        *
+        * 3-menu_sound
+        *  1 - ON
+        *  0 - OFF
+        *
+        * 4-game_sound
+        *  1 - ON
+        *  0 - OFF
+        */
         int16_t setReturn(int8_t i);
         //Сдвиг указанной настройки (i) на шаг(step) вправо или влево(step<0)
         //0-language, 1-color, 2-complex, 3-menu_sound, 4-game_sound
