@@ -5,7 +5,7 @@ The menu is navigated by pressing the arrow keys, ENTER and ESC.
 In the "ADD LEVEL" menu, TAB and ENTER are used to navigate between inputs.
 
 
-|              |                                                                 |
+| ------------ |---------------------------------------------------------------- |
 | Main.cpp     | основной исходный файл приложения                               |
 | ------------ | --------------------------------------------------------------- |
 | addons.h     | заголовочный файл подключающий заголовочные файлы классов       |
